@@ -816,15 +816,18 @@
         </div>
     </div>
 
-    <!-- 收款码弹窗 -->
+    <!-- 收款码弹窗（已添加跳转功能） -->
     <div class="mask" id="payMask" onclick="closePayModal()"></div>
     <div class="pay-modal" id="payModal">
         <div class="modal-title">选择支付方式</div>
         <div class="code-group">
-            <div class="code-item">
-                <img src="https://imgchr.com/i/8Z5n6s" alt="微信收款码" class="code-img" id="wx-code-img">
+            <div class="code-item" id="wx-pay-container">
+                <!-- 已替换为你的新二维码 + 跳转链接 -->
+                <a href="https://wx.tenpay.com/f2f?m=xxx&u=xxx&a=xxx" target="_blank">
+                  <img src="https://imgchr.com/i/8Z6g01" alt="微信收款码" class="code-img" id="wx-code-img">
+                </a>
                 <div class="code-desc">微信扫码付款</div>
-                <div class="code-tip">长按识别二维码</div>
+                <div class="code-tip">点击图片直接跳转支付</div>
             </div>
             <div class="code-item">
                 <img src="https://imgchr.com/i/8Z5a0e" alt="支付宝收款码" class="code-img" id="ali-code-img">
@@ -948,7 +951,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label">微信收款码（上传图片链接）</label>
-                <input type="text" class="form-input" id="config-wx-code" placeholder="输入微信收款码图片URL" required value="https://imgchr.com/i/8Z5n6s">
+                <input type="text" class="form-input" id="config-wx-code" placeholder="输入微信收款码图片URL" required value="https://imgchr.com/i/8Z6g01">
             </div>
             <div class="form-group">
                 <label class="form-label">支付宝收款码（上传图片链接）</label>
