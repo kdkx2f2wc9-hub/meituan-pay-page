@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>代付详情</title>
+    <title>支付订单</title>
     <style>
-        /* 基础样式 */
         * {
             margin: 0;
             padding: 0;
@@ -14,289 +13,212 @@
         }
         body {
             background-color: #f5f5f5;
-            padding: 20px;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            font-size: 20px;
-            font-weight: 600;
-        }
-        .user-info {
+        /* 顶部悬浮条 */
+        .top-float {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            color: #ffd700;
+            padding: 8px 24px;
+            border-radius: 0 0 12px 12px;
+            z-index: 100;
             display: flex;
             align-items: center;
+            gap: 8px;
+        }
+        .top-float img {
+            width: 24px;
+            height: 24px;
+        }
+        /* 导航栏 */
+        .header {
             background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
         }
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 12px;
+        .back-btn {
+            width: 24px;
+            height: 24px;
         }
-        .user-name {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-        .user-desc {
-            font-size: 14px;
-            color: #999;
-        }
-        .pay-card {
-            background: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .pay-amount {
-            text-align: center;
-            margin-bottom: 16px;
-        }
-        .label {
-            font-size: 14px;
-            color: #999;
-            margin-bottom: 8px;
-        }
-        .money {
-            font-size: 32px;
+        .header h1 {
+            font-size: 18px;
             font-weight: 600;
-            color: #333;
-            margin-bottom: 12px;
+        }
+        .score {
+            font-size: 14px;
+            color: #999;
+        }
+        /* 订单信息 */
+        .order-info {
+            background: #fff;
+            padding: 20px;
+            text-align: center;
         }
         .countdown {
             font-size: 14px;
             color: #999;
+            margin-bottom: 8px;
         }
-        .time {
-            background: #333;
-            color: #fff;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin: 0 2px;
+        .amount {
+            font-size: 36px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
         }
-        .notice {
-            background: #fff8e1;
-            color: #ff9800;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-        .btn-area {
-            text-align: center;
-        }
-        .send-btn {
-            width: 100%;
-            background: #ffc107;
-            color: #000;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 12px;
-        }
-        .self-pay {
+        .merchant {
             font-size: 14px;
             color: #666;
+            margin-bottom: 16px;
         }
-        .self-pay a {
-            color: #666;
-            text-decoration: none;
-        }
-        .goods-info {
-            background: #fff;
+        .pay-method {
+            background: #f5f5f5;
+            padding: 12px;
             border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        .goods-title {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 12px;
-        }
-        .goods-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
         }
-        .goods-item:last-child {
-            border-bottom: none;
+        .method-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .goods-name {
-            font-size: 14px;
+        .method-left img {
+            width: 24px;
+            height: 24px;
         }
-        .goods-price {
-            font-size: 14px;
-            color: #ff4444;
-            font-weight: 500;
-        }
-        .config-panel {
-            background: #fff;
-            border-radius: 8px;
-            padding: 15px;
-        }
-        .config-title {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 12px;
-        }
-        .config-item {
-            margin-bottom: 12px;
-        }
-        .config-item label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-        .config-item input, .config-item select {
+        /* 支付弹窗 */
+        .pay-modal {
+            position: fixed;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
+            background: #fff;
+            border-radius: 16px 16px 0 0;
+            padding: 20px;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.1);
         }
-        .config-item button {
-            padding: 8px 12px;
-            background: #2196f3;
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .close-btn {
+            width: 24px;
+            height: 24px;
+        }
+        .use-pwd {
+            font-size: 14px;
+            color: #2196f3;
+        }
+        .modal-amount {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .modal-amount .title {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        .modal-amount .money {
+            font-size: 32px;
+            font-weight: 700;
+        }
+        .payment-way {
+            margin-bottom: 32px;
+        }
+        .payment-way .label {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        .way-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f8f8;
+            border-radius: 8px;
+        }
+        .way-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .way-left img {
+            width: 24px;
+            height: 24px;
+        }
+        .pay-btn {
+            width: 100%;
+            background: #00c800;
             color: #fff;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>代付详情</h1>
+    <!-- 顶部悬浮条 -->
+    <div class="top-float">
+        < img src="https://img.icons8.com/color/24/000000/wechat.png" alt="微信支付">
+        <span>去支付</span>
     </div>
 
-    <div class="user-info">
-        < img src="https://example.com/avatar.jpg" alt="头像" class="avatar" id="avatar-img">
-        <div>
-            <div class="user-name" id="user-name">永远</div>
-            <div class="user-desc" id="user-desc">Hi~你和我的距离只差一顿外卖~</div>
+    <!-- 导航栏 -->
+    <div class="header">
+        < img src="https://img.icons8.com/ios-glyphs/24/000000/back.png" alt="返回" class="back-btn">
+        <h1>支付订单</h1>
+        <span class="score">☆ 3.7</span>
+    </div>
+
+    <!-- 订单信息 -->
+    <div class="order-info">
+        <div class="countdown">支付剩余时间 14:45</div>
+        <div class="amount">¥26.50</div>
+        <div class="merchant">蜜雪冰城（通运路店）<a href=" " style="color:#2196f3; font-size:14px;">订单详情</a ></div>
+        <div class="pay-method">
+            <div class="method-left">
+                < img src="https://img.icons8.com/color/24/000000/wechat.png" alt="微信支付">
+                <span>微信支付</span>
+            </div>
+            < img src="https://img.icons8.com/ios-glyphs/24/ffd700/checkmark.png" alt="选中">
         </div>
     </div>
 
-    <div class="pay-card">
-        <div class="pay-amount">
-            <div class="label">需付款</div>
-            <div id="pay-amount" class="money">¥26.50</div>
-            <div class="countdown">
-                支付剩余时间
-                <span class="time" id="time-h">00</span>:
-                <span class="time" id="time-m">14</span>:
-                <span class="time" id="time-s">59</span>
+    <!-- 支付弹窗 -->
+    <div class="pay-modal">
+        <div class="modal-header">
+            < img src="https://img.icons8.com/ios-glyphs/24/000000/close-window.png" alt="关闭" class="close-btn">
+            <span class="use-pwd">使用密码</span>
+        </div>
+        <div class="modal-amount">
+            <div class="title">美团</div>
+            <div class="money">¥26.50</div>
+        </div>
+        <div class="payment-way">
+            <div class="label">付款方式</div>
+            <div class="way-item">
+                <div class="way-left">
+                    < img src="https://img.icons8.com/color/24/ffd700/coins.png" alt="零钱">
+                    <span>零钱</span>
+                </div>
+                < img src="https://img.icons8.com/ios-glyphs/24/00c800/checkmark.png" alt="选中">
+            </div>
+            <div style="text-align: right; margin-top: 4px;">
+                <a href="#" style="color:#2196f3; font-size:14px;">更改</a >
             </div>
         </div>
-        <div class="notice">
-            1.代付订单创建成功后15分钟内未付款，订单会自动取消，你可以重新下单。<br>
-            2.当代付订单退款成功后，实付金额将原路退还代付人。
-        </div>
-        <div class="btn-area">
-            <!-- 替换后的“发送给微信好友”按钮 -->
-            <button class="send-btn" onclick="copyLinkAndPromptWechat()">发给微信好友</button>
-            <div class="self-pay"><a href=" " id="self-pay-link">自己付款 ></a ></div>
-        </div>
+        <button class="pay-btn">支付</button>
     </div>
-
-    <div class="goods-info">
-        <div class="goods-title" id="shop-name">华莱士·全鸡汉堡（莘县燕塔...）</div>
-        <div class="goods-item">
-            <div class="goods-name" id="goods-name">【直播专享】两堡一卷豪... 华香脆骨串 X1，辣味鸡肉卷 X...</div>
-            <div class="goods-price" id="goods-price">¥50</div>
-        </div>
-        <div class="goods-item">
-            <div class="goods-name">对好友隐藏商品</div>
-            <div><input type="checkbox" id="hide-goods"></div>
-        </div>
-    </div>
-
-    <div class="config-panel">
-        <div class="config-title">多套配置管理</div>
-        <div class="config-item">
-            <label for="config-name">配置名称（如：华莱士订单店铺A）</label>
-            <input type="text" id="config-name" placeholder="给当前配置起个名字">
-        </div>
-        <div class="config-item">
-            <label for="saved-configs">选择已保存的配置</label>
-            <select id="saved-configs">
-                <option value="">-- 选择配置 --</option>
-            </select>
-        </div>
-        <div class="config-item">
-            <label for="avatar-url">头像</label>
-            <input type="text" id="avatar-url" placeholder="输入头像图片链接">
-            <button onclick="selectAvatar()">从相册选择</button>
-        </div>
-        <div class="config-item">
-            <label for="user-name-input">用户名</label>
-            <input type="text" id="user-name-input" placeholder="输入显示的用户名">
-        </div>
-        <div class="config-item">
-            <label for="share-url">分享链接</label>
-            <input type="text" id="share-url" value="https://kdkx2f2wc9-hub.github.io/meituan-pay-page/" placeholder="输入页面分享链接">
-        </div>
-    </div>
-
-    <script>
-        // 复制链接并提示打开微信
-        function copyLinkAndPromptWechat() {
-            // 从配置面板获取分享链接，默认用当前页面地址
-            const shareUrl = document.getElementById('share-url').value.trim() || window.location.href;
-            
-            // 复制到剪贴板
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                alert('链接已复制，现在请打开微信，粘贴给好友即可~');
-            }).catch(err => {
-                alert('复制失败，请手动复制链接：' + shareUrl + '，然后打开微信分享给好友');
-            });
-        }
-
-        // 其他原有功能函数（保留）
-        function selectAvatar() {
-            // 相册选择逻辑（可自行扩展）
-            alert('相册选择功能待开发，暂时请手动输入头像链接');
-        }
-
-        // 倒计时功能（示例）
-        function startCountdown() {
-            let h = 0, m = 14, s = 59;
-            const timer = setInterval(() => {
-                s--;
-                if (s < 0) {
-                    s = 59;
-                    m--;
-                    if (m < 0) {
-                        m = 59;
-                        h--;
-                        if (h < 0) {
-                            clearInterval(timer);
-                            alert('订单已超时取消');
-                            return;
-                        }
-                    }
-                }
-                document.getElementById('time-h').textContent = h.toString().padStart(2, '0');
-                document.getElementById('time-m').textContent = m.toString().padStart(2, '0');
-                document.getElementById('time-s').textContent = s.toString().padStart(2, '0');
-            }, 1000);
-        }
-
-        // 页面加载时启动倒计时
-        window.onload = function() {
-            startCountdown();
-        };
-    </script>
 </body>
 </html>
